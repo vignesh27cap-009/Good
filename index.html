@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinical Headache &amp; Migraine Assessment</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      padding: 16px 10px;
+      min-height: 100vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 720px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 20px 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+    /* Clickable Tab Navigation */
+    .tabs-nav {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #334155;
+      padding-bottom: 10px;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      background: #38bdf8;
+      color: #0f172a;
+      border-color: #38bdf8;
+    }
+
+    /* Page Visibility */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    h1 {
+      font-size: 1.25rem;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+    .subtext {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    /* Question Cards */
+    .q-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .q-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .radio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+    }
+    .radio-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #f8fafc;
+    }
+    .radio-label input {
+      accent-color: #38bdf8;
+      transform: scale(1.15);
+    }
+
+    /* Inputs for Page 3 */
+    .num-input-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .num-input-row input[type="number"] {
+      width: 70px;
+      padding: 8px;
+      font-size: 1rem;
+      text-align: center;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #fff;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    /* Action Buttons */
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid #334155;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      background: #38bdf8;
+      color: #0f172a;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .btn-submit {
+      background: #34d399;
+      color: #064e3b;
+    }
+    .btn-outline {
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid #334155;
+    }
+
+    /* Table on Page 4 */
+    .table-box {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 14px;
+      border: 1px solid #334155;
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      background: #111827;
+      text-align: left;
+    }
+    th {
+      background: #93c5fd;
+      color: #0f172a;
+      font-weight: 700;
+      padding: 12px;
+    }
+    td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #1f2937;
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    .t-bold { font-weight: 700; color: #fff; }
+
+    .patient-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .patient-info input {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 10px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.88rem;
+    }
+    #statusMessage {
+      margin-top: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="tabs-nav">
+    <button type="button" class="tab-btn active" id="tab1" onclick="goToPage(1)">1. HIT-6™</button>
+    <button type="button" class="tab-btn" id="tab2" onclick="goToPage(2)">2. MSQ (14 Items)</button>
+    <button type="button" class="tab-btn" id="tab3" onclick="goToPage(3)">3. MIDAS &amp; VAS</button>
+    <button type="button" class="tab-btn" id="tab4" onclick="calculateAndShowSummary()">4. Results Table</button>
+  </div>
+
+  <div class="page active" id="page1">
+    <h1>HIT-6™ Headache Impact Test</h1>
+    <p class="subtext">Select one answer for each question (past 4 weeks).</p>
+
+    <div class="q-card">
+      <div class="q-title">1. When you have headaches, how often is the pain severe?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="hit1" value="6" checked> Never (6)</label>
+        <label class="radio-label"><input type="radio" name="hit1" value="8"> Rarely (8)</label>
+        <label class="radio-label"><input type="radio" name="hit1" value="10"> Sometimes (10)</label>
+        <label class="radio-label"><input type="radio" name="hit1" value="11"> Very Often (11)</label>
+        <label class="radio-label"><input type="radio" name="hit1" value="13"> Always (13)</label>
+      </div>
+    </div>
+    <div class="q-card">
+      <div class="q-title">2. How often do headaches limit your ability to do usual daily activities?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="hit2" value="6" checked> Never (6)</label>
+        <label class="radio-label"><input type="radio" name="hit2" value="8"> Rarely (8)</label>
+        <label class="radio-label"><input type="radio" name="hit2" value="10"> Sometimes (10)</label>
+        <label class="radio-label"><input type="radio" name="hit2" value="11"> Very Often (11)</label>
+        <label class="radio-label"><input type="radio" name="hit2" value="13"> Always (13)</label>
+      </div>
+    </div>
+    <div class="q-card">
+      <div class="q-title">3. When you have a headache, how often do you wish you could lie down?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="hit3" value="6" checked> Never (6)</label>
+        <label class="radio-label"><input type="radio" name="hit3" value="8"> Rarely (8)</label>
+        <label class="radio-label"><input type="radio" name="hit3" value="10"> Sometimes (10)</label>
+        <label class="radio-label"><input type="radio" name="hit3" value="11"> Very Often (11)</label>
+        <label class="radio-label"><input type="radio" name="hit3" value="13"> Always (13)</label>
+      </div>
+    </div>
+    <div class="q-card">
+      <div class="q-title">4. In the past 4 weeks, how often have you felt too tired to work or do daily activities?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="hit4" value="6" checked> Never (6)</label>
+        <label class="radio-label"><input type="radio" name="hit4" value="8"> Rarely (8)</label>
+        <label class="radio-label"><input type="radio" name="hit4" value="10"> Sometimes (10)</label>
+        <label class="radio-label"><input type="radio" name="hit4" value="11"> Very Often (11)</label>
+        <label class="radio-label"><input type="radio" name="hit4" value="13"> Always (13)</label>
+      </div>
+    </div>
+    <div class="q-card">
+      <div class="q-title">5. In the past 4 weeks, how often have you felt fed up or irritated because of headaches?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="hit5" value="6" checked> Never (6)</label>
+        <label class="radio-label"><input type="radio" name="hit5" value="8"> Rarely (8)</label>
+        <label class="radio-label"><input type="radio" name="hit5" value="10"> Sometimes (10)</label>
+        <label class="radio-label"><input type="radio" name="hit5" value="11"> Very Often (11)</label>
+        <label class="radio-label"><input type="radio" name="hit5" value="13"> Always (13)</label>
+      </div>
+    </div>
+    <div class="q-card">
+      <div class="q-title">6. In the past 4 weeks, how often did headaches limit your ability to concentrate?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="hit6" value="6" checked> Never (6)</label>
+        <label class="radio-label"><input type="radio" name="hit6" value="8"> Rarely (8)</label>
+        <label class="radio-label"><input type="radio" name="hit6" value="10"> Sometimes (10)</label>
+        <label class="radio-label"><input type="radio" name="hit6" value="11"> Very Often (11)</label>
+        <label class="radio-label"><input type="radio" name="hit6" value="13"> Always (13)</label>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <div></div>
+      <button type="button" class="btn" onclick="goToPage(2)">Next: MSQ &rarr;</button>
+    </div>
+  </div>
+
+  <div class="page" id="page2">
+    <h1>MSQ (Migraine-Specific Quality of Life)</h1>
+    <p class="subtext">Select one answer for each item (Scale 1: None of the time &rarr; 6: All of the time).</p>
+
+    <div class="q-card">
+      <span class="badge">Role-Restrictive</span>
+      <div class="q-title">1. Interfeared with daily relationships with family, friends, others?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq1" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq1" value="2"> 2: A Little</label>
+        <label class="radio-label"><input type="radio" name="msq1" value="3"> 3: Some</label>
+        <label class="radio-label"><input type="radio" name="msq1" value="4"> 4: Good bit</label>
+        <label class="radio-label"><input type="radio" name="msq1" value="5"> 5: Most</label>
+        <label class="radio-label"><input type="radio" name="msq1" value="6"> 6: All</label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <span class="badge">Role-Restrictive</span>
+      <div class="q-title">2. Interrupted leisure activities such as reading or exercising?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq2" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq2" value="2"> 2: A Little</label>
+        <label class="radio-label"><input type="radio" name="msq2" value="3"> 3: Some</label>
+        <label class="radio-label"><input type="radio" name="msq2" value="4"> 4: Good bit</label>
+        <label class="radio-label"><input type="radio" name="msq2" value="5"> 5: Most</label>
+        <label class="radio-label"><input type="radio" name="msq2" value="6"> 6: All</label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <span class="badge">Role-Restrictive</span>
+      <div class="q-title">3. Difficulty performing work or daily activities?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq3" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq3" value="2"> 2: A Little</label>
+        <label class="radio-label"><input type="radio" name="msq3" value="3"> 3: Some</label>
+        <label class="radio-label"><input type="radio" name="msq3" value="4"> 4: Good bit</label>
+        <label class="radio-label"><input type="radio" name="msq3" value="5"> 5: Most</label>
+        <label class="radio-label"><input type="radio" name="msq3" value="6"> 6: All</label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <span class="badge">Role-Restrictive</span>
+      <div class="q-title">4. Kept you from accomplishing as much at work or home?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq4" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq4" value="2"> 2: A Little</label>
+        <label class="radio-label"><input type="radio" name="msq4" value="3"> 3: Some</label>
+        <label class="radio-label"><input type="radio" name="msq4" value="4"> 4: Good bit</label>
+        <label class="radio-label"><input type="radio" name="msq4" value="5"> 5: Most</label>
+        <label class="radio-label"><input type="radio" name="msq4" value="6"> 6: All</label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <span class="badge">Role-Restrictive</span>
+      <div class="q-title">5. Limited ability to work or do activities carefully?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq4" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq5" value="2"> 2: A Little</label>
+        <label class="radio-label"><input type="radio" name="msq5" value="3"> 3: Some</label>
+        <label class="radio-label"><input type="radio" name="msq5" value="4"> 4: Good bit</label>
+        <label class="radio-label"><input type="radio" name="msq5" value="5"> 5: Most</label>
+        <label class="radio-label"><input type="radio" name="msq5" value="6"> 6: All</label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <span class="badge">Role-Restrictive</span>
+      <div class="q-title">6. Had to cancel or delay work/social events due to exhaustion?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq6" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq6" value="2"> 2: A Little</label>
+        <label class="radio-label"><input type="radio" name="msq6" value="3"> 3: Some</label>
+        <label class="radio-label"><input type="radio" name="msq6" value="4"> 4: Good bit</label>
+        <label class="radio-label"><input type="radio" name="msq6" value="5"> 5: Most</label>
+        <label class="radio-label"><input type="radio" name="msq6" value="6"> 6: All</label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <span class="badge">Role-Restrictive</span>
+      <div class="q-title">7. Migraines left you with limited energy levels?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq7" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq7" value="2"> 2: A Little</label>
+        <label class="radio-label"><input type="radio" name="msq7" value="3"> 3: Some</label>
+        <label class="radio-label"><input type="radio" name="msq7" value="4"> 4: Good bit</label>
+        <label class="radio-label"><input type="radio" name="msq7" value="5"> 5: Most</label>
+        <label class="radio-label"><input type="radio" name="msq7" value="6"> 6: All</label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <span class="badge">Role-Preventive</span>
+      <div class="q-title">8. Stopped you from work or daily activities completely?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq8" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq8" value="2"> 2: A Little</label>
+        <label class="radio-label"><input type="radio" name="msq8" value="3"> 3: Some</label>
+        <label class="radio-label"><input type="radio" name="msq8" value="4"> 4: Good bit</label>
+        <label class="radio-label"><input type="radio" name="msq8" value="5"> 5: Most</label>
+        <label class="radio-label"><input type="radio" name="msq8" value="6"> 6: All</label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <span class="badge">Role-Preventive</span>
+      <div class="q-title">9. Needed help from others for routine tasks during attack?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq9" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq9" value="2"> 2: A Little</label>
+        <label class="radio-label"><input type="radio" name="msq9" value="3"> 3: Some</label>
+        <label class="radio-label"><input type="radio" name="msq9" value="4"> 4: Good bit</label>
+        <label class="radio-label"><input type="radio" name="msq9" value="5"> 5: Most</label>
+        <label class="radio-label"><input type="radio" name="msq9" value="6"> 6: All</label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <span class="badge">Role-Preventive</span>
+      <div class="q-title">10. Avoided social/family events to manage migraine attack?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq10" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq10" value="2"> 2: A Little</label>
+        <label class="radio-label"><input type="radio" name="msq10" value="3"> 3: Some</label>
+        <label class="radio-label"><input type="radio" name="msq10" value="4"> 4: Good bit</label>
+        <label class="radio-label"><input type="radio" name="msq10" value="5"> 5: Most</label>
+        <label class="radio-label"><input type="radio" name="msq10" value="6"> 6: All</label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <span class="badge">Role-Preventive</span>
+      <div class="q-title">11. Difficult to attend social events or parties?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq11" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq11" value="2"> 2: A Little</label>
+        <label class="radio-label"><input type="radio" name="msq11" value="3"> 3: Some</label>
+        <label class="radio-label"><input type="radio" name="msq11" value="4"> 4: Good bit</label>
+        <label class="radio-label"><input type="radio" name="msq11" value="5"> 5: Most</label>
+        <label class="radio-label"><input type="radio" name="msq11" value="6"> 6: All</label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <span class="badge">Emotional Function</span>
+      <div class="q-title">12. Felt fed up or frustrated because of migraines?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq12" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq12" value="2"> 2: A Little</label>
+        <label class="radio-label"><input type="radio" name="msq12" value="3"> 3: Some</label>
+        <label class="radio-label"><input type="radio" name="msq12" value="4"> 4: Good bit</label>
+        <label class="radio-label"><input type="radio" name="msq12" value="5"> 5: Most</label>
+        <label class="radio-label"><input type="radio" name="msq12" value="6"> 6: All</label>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <span class="badge">Emotional Function</span>
+      <div class="q-title">13. Felt like a burden to family or others?</div>
+      <div class="radio-grid">
+        <label class="radio-label"><input type="radio" name="msq13" value="1" checked> 1: None</label>
+        <label class="radio-label"><input type="radio" name="msq13" value="2"> 2: A Little</lab
