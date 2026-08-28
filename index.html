@@ -3,464 +3,252 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clinical Headache &amp; Migraine Assessment</title>
+  <title>Headache & Migraine Clinical Assessment</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    body {
-      background-color: #0f172a;
-      color: #f8fafc;
-      display: flex;
-      justify-content: center;
-      padding: 16px 10px;
-      min-height: 100vh;
-    }
-    .container {
-      width: 100%;
-      max-width: 720px;
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 14px;
-      padding: 20px 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    }
-    /* Clickable Tab Navigation */
-    .tabs-nav {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 20px;
-      border-bottom: 2px solid #334155;
-      padding-bottom: 10px;
-      overflow-x: auto;
-    }
-    .tab-btn {
-      background: #0f172a;
-      border: 1px solid #334155;
-      color: #94a3b8;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .tab-btn.active {
-      background: #38bdf8;
-      color: #0f172a;
-      border-color: #38bdf8;
-    }
-
-    /* Page Visibility */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; padding: 16px 10px; min-height: 100vh; }
+    .container { width: 100%; max-width: 700px; background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    .tabs-nav { display: flex; gap: 6px; margin-bottom: 20px; border-bottom: 2px solid #334155; padding-bottom: 10px; overflow-x: auto; }
+    .tab-btn { background: #0f172a; border: 1px solid #334155; color: #94a3b8; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .tab-btn.active { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
     .page { display: none; }
     .page.active { display: block; }
-
-    h1 {
-      font-size: 1.25rem;
-      margin-bottom: 6px;
-      color: #fff;
-    }
-    .subtext {
-      font-size: 0.85rem;
-      color: #94a3b8;
-      margin-bottom: 18px;
-      line-height: 1.4;
-    }
-
-    /* Question Cards */
-    .q-card {
-      background: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 10px;
-      padding: 14px;
-      margin-bottom: 14px;
-    }
-    .q-title {
-      font-size: 0.92rem;
-      font-weight: 600;
-      margin-bottom: 12px;
-      line-height: 1.4;
-    }
-    .badge {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 4px;
-      background: rgba(56, 189, 248, 0.2);
-      color: #38bdf8;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-    }
-    .radio-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 8px;
-    }
-    .radio-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #1e293b;
-      border: 1px solid #334155;
-      padding: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      color: #f8fafc;
-    }
-    .radio-label input {
-      accent-color: #38bdf8;
-      transform: scale(1.15);
-    }
-
-    /* Inputs for Page 3 */
-    .num-input-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .num-input-row input[type="number"] {
-      width: 70px;
-      padding: 8px;
-      font-size: 1rem;
-      text-align: center;
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #fff;
-      border-radius: 6px;
-      flex-shrink: 0;
-    }
-
-    /* Action Buttons */
-    .action-row {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-      padding-top: 14px;
-      border-top: 1px solid #334155;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .btn {
-      background: #38bdf8;
-      color: #0f172a;
-      font-weight: 700;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-    .btn-submit {
-      background: #34d399;
-      color: #064e3b;
-    }
-    .btn-outline {
-      background: transparent;
-      color: #94a3b8;
-      border: 1px solid #334155;
-    }
-
-    /* Table on Page 4 */
-    .table-box {
-      width: 100%;
-      overflow-x: auto;
-      margin-top: 14px;
-      border: 1px solid #334155;
-      border-radius: 8px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-      background: #111827;
-      text-align: left;
-    }
-    th {
-      background: #93c5fd;
-      color: #0f172a;
-      font-weight: 700;
-      padding: 12px;
-    }
-    td {
-      padding: 14px 12px;
-      border-bottom: 1px solid #1f2937;
-      vertical-align: top;
-    }
+    h1 { font-size: 1.25rem; margin-bottom: 6px; color: #fff; }
+    .subtext { font-size: 0.85rem; color: #94a3b8; margin-bottom: 16px; }
+    .q-card { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+    .q-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 10px; line-height: 1.4; }
+    .badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: rgba(56, 189, 248, 0.2); color: #38bdf8; margin-bottom: 6px; text-transform: uppercase; }
+    .radio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+    .radio-label { display: flex; align-items: center; gap: 6px; background: #1e293b; border: 1px solid #334155; padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; }
+    .radio-label input { accent-color: #38bdf8; }
+    .num-row { display: flex; align-items: center; gap: 12px; }
+    .num-row input[type="number"] { width: 65px; padding: 8px; font-size: 1rem; text-align: center; background: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 6px; flex-shrink: 0; }
+    .action-row { display: flex; justify-content: space-between; margin-top: 18px; padding-top: 12px; border-top: 1px solid #334155; gap: 8px; flex-wrap: wrap; }
+    .btn { background: #38bdf8; color: #0f172a; font-weight: 700; border: none; border-radius: 6px; padding: 10px 16px; font-size: 0.88rem; cursor: pointer; }
+    .btn-submit { background: #34d399; color: #064e3b; }
+    .btn-outline { background: transparent; color: #94a3b8; border: 1px solid #334155; }
+    .table-box { width: 100%; overflow-x: auto; margin-top: 14px; border: 1px solid #334155; border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #111827; text-align: left; }
+    th { background: #93c5fd; color: #0f172a; font-weight: 700; padding: 10px; }
+    td { padding: 12px 10px; border-bottom: 1px solid #1f2937; vertical-align: top; }
     tr:last-child td { border-bottom: none; }
     .t-bold { font-weight: 700; color: #fff; }
-
-    .patient-info {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 16px;
-    }
-    .patient-info input {
-      background: #0f172a;
-      border: 1px solid #334155;
-      padding: 10px;
-      border-radius: 8px;
-      color: #fff;
-      font-size: 0.88rem;
-    }
-    #statusMessage {
-      margin-top: 10px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      text-align: center;
-    }
+    .patient-box { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+    .patient-box input { background: #0f172a; border: 1px solid #334155; padding: 8px; border-radius: 6px; color: #fff; font-size: 0.85rem; }
+    #statusMsg { margin-top: 10px; font-size: 0.85rem; font-weight: 600; text-align: center; }
   </style>
 </head>
 <body>
 
 <div class="container">
-
   <div class="tabs-nav">
-    <button type="button" class="tab-btn active" id="tab1" onclick="goToPage(1)">1. HIT-6™</button>
-    <button type="button" class="tab-btn" id="tab2" onclick="goToPage(2)">2. MSQ (14 Items)</button>
-    <button type="button" class="tab-btn" id="tab3" onclick="goToPage(3)">3. MIDAS &amp; VAS</button>
-    <button type="button" class="tab-btn" id="tab4" onclick="calculateAndShowSummary()">4. Results Table</button>
+    <button type="button" class="tab-btn active" id="tab1" onclick="setTab(1)">1. HIT-6™</button>
+    <button type="button" class="tab-btn" id="tab2" onclick="setTab(2)">2. MSQ (14 Items)</button>
+    <button type="button" class="tab-btn" id="tab3" onclick="setTab(3)">3. MIDAS &amp; VAS</button>
+    <button type="button" class="tab-btn" id="tab4" onclick="calcAndShow()">4. Results Table</button>
   </div>
 
   <div class="page active" id="page1">
     <h1>HIT-6™ Headache Impact Test</h1>
     <p class="subtext">Select one answer for each question (past 4 weeks).</p>
-
-    <div class="q-card">
-      <div class="q-title">1. When you have headaches, how often is the pain severe?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="hit1" value="6" checked> Never (6)</label>
-        <label class="radio-label"><input type="radio" name="hit1" value="8"> Rarely (8)</label>
-        <label class="radio-label"><input type="radio" name="hit1" value="10"> Sometimes (10)</label>
-        <label class="radio-label"><input type="radio" name="hit1" value="11"> Very Often (11)</label>
-        <label class="radio-label"><input type="radio" name="hit1" value="13"> Always (13)</label>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-title">2. How often do headaches limit your ability to do usual daily activities?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="hit2" value="6" checked> Never (6)</label>
-        <label class="radio-label"><input type="radio" name="hit2" value="8"> Rarely (8)</label>
-        <label class="radio-label"><input type="radio" name="hit2" value="10"> Sometimes (10)</label>
-        <label class="radio-label"><input type="radio" name="hit2" value="11"> Very Often (11)</label>
-        <label class="radio-label"><input type="radio" name="hit2" value="13"> Always (13)</label>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-title">3. When you have a headache, how often do you wish you could lie down?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="hit3" value="6" checked> Never (6)</label>
-        <label class="radio-label"><input type="radio" name="hit3" value="8"> Rarely (8)</label>
-        <label class="radio-label"><input type="radio" name="hit3" value="10"> Sometimes (10)</label>
-        <label class="radio-label"><input type="radio" name="hit3" value="11"> Very Often (11)</label>
-        <label class="radio-label"><input type="radio" name="hit3" value="13"> Always (13)</label>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-title">4. In the past 4 weeks, how often have you felt too tired to work or do daily activities?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="hit4" value="6" checked> Never (6)</label>
-        <label class="radio-label"><input type="radio" name="hit4" value="8"> Rarely (8)</label>
-        <label class="radio-label"><input type="radio" name="hit4" value="10"> Sometimes (10)</label>
-        <label class="radio-label"><input type="radio" name="hit4" value="11"> Very Often (11)</label>
-        <label class="radio-label"><input type="radio" name="hit4" value="13"> Always (13)</label>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-title">5. In the past 4 weeks, how often have you felt fed up or irritated because of headaches?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="hit5" value="6" checked> Never (6)</label>
-        <label class="radio-label"><input type="radio" name="hit5" value="8"> Rarely (8)</label>
-        <label class="radio-label"><input type="radio" name="hit5" value="10"> Sometimes (10)</label>
-        <label class="radio-label"><input type="radio" name="hit5" value="11"> Very Often (11)</label>
-        <label class="radio-label"><input type="radio" name="hit5" value="13"> Always (13)</label>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-title">6. In the past 4 weeks, how often did headaches limit your ability to concentrate?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="hit6" value="6" checked> Never (6)</label>
-        <label class="radio-label"><input type="radio" name="hit6" value="8"> Rarely (8)</label>
-        <label class="radio-label"><input type="radio" name="hit6" value="10"> Sometimes (10)</label>
-        <label class="radio-label"><input type="radio" name="hit6" value="11"> Very Often (11)</label>
-        <label class="radio-label"><input type="radio" name="hit6" value="13"> Always (13)</label>
-      </div>
-    </div>
-
+    <div id="hit6Container"></div>
     <div class="action-row">
       <div></div>
-      <button type="button" class="btn" onclick="goToPage(2)">Next: MSQ &rarr;</button>
+      <button type="button" class="btn" onclick="setTab(2)">Next: MSQ &rarr;</button>
     </div>
   </div>
 
   <div class="page" id="page2">
     <h1>MSQ (Migraine-Specific Quality of Life)</h1>
-    <p class="subtext">Select one answer for each item (Scale 1: None of the time &rarr; 6: All of the time).</p>
+    <p class="subtext">Select one answer for each item (Scale: None &rarr; All).</p>
+    <div id="msqContainer"></div>
+    <div class="action-row">
+      <button type="button" class="btn btn-outline" onclick="setTab(1)">&larr; Back to HIT-6</button>
+      <button type="button" class="btn" onclick="setTab(3)">Next: MIDAS &rarr;</button>
+    </div>
+  </div>
 
+  <div class="page" id="page3">
+    <h1>MIDAS &amp; Pain Intensity (VAS)</h1>
+    <p class="subtext">Enter your estimates for the last 3 months.</p>
+    <div class="q-card num-row"><input type="number" id="m1" min="0" value="0"><div><b>1.</b> Days missed from work or school?</div></div>
+    <div class="q-card num-row"><input type="number" id="m2" min="0" value="0"><div><b>2.</b> Days productivity reduced by half at work/school?</div></div>
+    <div class="q-card num-row"><input type="number" id="m3" min="0" value="0"><div><b>3.</b> Days you did not do household work?</div></div>
+    <div class="q-card num-row"><input type="number" id="m4" min="0" value="0"><div><b>4.</b> Days household productivity reduced by half?</div></div>
+    <div class="q-card num-row"><input type="number" id="m5" min="0" value="0"><div><b>5.</b> Days you missed family/social activities?</div></div>
+    <div class="q-card num-row"><input type="number" id="ma" min="0" value="0"><div><b>A.</b> Total headache days in last 3 months?</div></div>
     <div class="q-card">
-      <span class="badge">Role-Restrictive</span>
-      <div class="q-title">1. Interfeared with daily relationships with family, friends, others?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq1" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq1" value="2"> 2: A Little</label>
-        <label class="radio-label"><input type="radio" name="msq1" value="3"> 3: Some</label>
-        <label class="radio-label"><input type="radio" name="msq1" value="4"> 4: Good bit</label>
-        <label class="radio-label"><input type="radio" name="msq1" value="5"> 5: Most</label>
-        <label class="radio-label"><input type="radio" name="msq1" value="6"> 6: All</label>
+      <div style="font-size:0.9rem; font-weight:600; margin-bottom:8px;">B. VAS Pain Score: <span id="vasDisplay" style="color:#38bdf8;">5</span>/10</div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:0.75rem;">0</span>
+        <input type="range" id="vasIn" min="0" max="10" value="5" style="flex-grow:1; accent-color:#38bdf8;" oninput="document.getElementById('vasDisplay').innerText=this.value">
+        <span style="font-size:0.75rem;">10</span>
       </div>
     </div>
-
-    <div class="q-card">
-      <span class="badge">Role-Restrictive</span>
-      <div class="q-title">2. Interrupted leisure activities such as reading or exercising?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq2" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq2" value="2"> 2: A Little</label>
-        <label class="radio-label"><input type="radio" name="msq2" value="3"> 3: Some</label>
-        <label class="radio-label"><input type="radio" name="msq2" value="4"> 4: Good bit</label>
-        <label class="radio-label"><input type="radio" name="msq2" value="5"> 5: Most</label>
-        <label class="radio-label"><input type="radio" name="msq2" value="6"> 6: All</label>
-      </div>
+    <div class="action-row">
+      <button type="button" class="btn btn-outline" onclick="setTab(2)">&larr; Back to MSQ</button>
+      <button type="button" class="btn" onclick="calcAndShow()">Calculate &amp; View Summary &rarr;</button>
     </div>
+  </div>
 
-    <div class="q-card">
-      <span class="badge">Role-Restrictive</span>
-      <div class="q-title">3. Difficulty performing work or daily activities?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq3" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq3" value="2"> 2: A Little</label>
-        <label class="radio-label"><input type="radio" name="msq3" value="3"> 3: Some</label>
-        <label class="radio-label"><input type="radio" name="msq3" value="4"> 4: Good bit</label>
-        <label class="radio-label"><input type="radio" name="msq3" value="5"> 5: Most</label>
-        <label class="radio-label"><input type="radio" name="msq3" value="6"> 6: All</label>
-      </div>
+  <div class="page" id="page4">
+    <h1>Clinical Assessment Results</h1>
+    <p class="subtext">Summary table &amp; email delivery.</p>
+    <div class="table-box">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:20%;">Assessment / Tool</th>
+            <th style="width:30%;">Full Name / Description</th>
+            <th style="width:18%;">Score / Result</th>
+            <th style="width:32%;">Clinical Interpretation</th>
+          </tr>
+        </thead>
+        <tbody id="resultsTbody"></tbody>
+      </table>
     </div>
-
-    <div class="q-card">
-      <span class="badge">Role-Restrictive</span>
-      <div class="q-title">4. Kept you from accomplishing as much at work or home?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq4" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq4" value="2"> 2: A Little</label>
-        <label class="radio-label"><input type="radio" name="msq4" value="3"> 3: Some</label>
-        <label class="radio-label"><input type="radio" name="msq4" value="4"> 4: Good bit</label>
-        <label class="radio-label"><input type="radio" name="msq4" value="5"> 5: Most</label>
-        <label class="radio-label"><input type="radio" name="msq4" value="6"> 6: All</label>
-      </div>
+    <div class="patient-box">
+      <input type="text" id="pName" placeholder="Patient/User Name">
+      <input type="email" id="pEmail" placeholder="Patient/User Email">
     </div>
-
-    <div class="q-card">
-      <span class="badge">Role-Restrictive</span>
-      <div class="q-title">5. Limited ability to work or do activities carefully?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq4" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq5" value="2"> 2: A Little</label>
-        <label class="radio-label"><input type="radio" name="msq5" value="3"> 3: Some</label>
-        <label class="radio-label"><input type="radio" name="msq5" value="4"> 4: Good bit</label>
-        <label class="radio-label"><input type="radio" name="msq5" value="5"> 5: Most</label>
-        <label class="radio-label"><input type="radio" name="msq5" value="6"> 6: All</label>
-      </div>
+    <div id="statusMsg"></div>
+    <div class="action-row">
+      <button type="button" class="btn btn-outline" onclick="setTab(1)">Retake All</button>
+      <button type="button" class="btn btn-submit" id="sendBtn" onclick="sendMail()">Submit &amp; Email Report &#9993;</button>
+      <button type="button" class="btn btn-outline" onclick="window.print()">Print / PDF</button>
     </div>
+  </div>
+</div>
 
+<script>
+  const hitQuestions = [
+    "1. When you have headaches, how often is the pain severe?",
+    "2. How often do headaches limit your ability to do usual daily activities?",
+    "3. When you have a headache, how often do you wish you could lie down?",
+    "4. In past 4 weeks, how often have you felt too tired to work or do daily activities?",
+    "5. In past 4 weeks, how often have you felt fed up or irritated because of headaches?",
+    "6. In past 4 weeks, how often did headaches limit ability to concentrate?"
+  ];
+  const hitOpts = [{t:"Never (6)",v:6},{t:"Rarely (8)",v:8},{t:"Sometimes (10)",v:10},{t:"Very Often (11)",v:11},{t:"Always (13)",v:13}];
+
+  const msqQuestions = [
+    {d:"Role-Restrictive", t:"1. Interfeared with daily relationships with family, friends, others?"},
+    {d:"Role-Restrictive", t:"2. Interrupted leisure activities such as reading or exercising?"},
+    {d:"Role-Restrictive", t:"3. Difficulty performing work or daily activities?"},
+    {d:"Role-Restrictive", t:"4. Kept you from accomplishing as much at work or home?"},
+    {d:"Role-Restrictive", t:"5. Limited ability to work or do activities carefully?"},
+    {d:"Role-Restrictive", t:"6. Had to cancel or delay work/social events due to exhaustion?"},
+    {d:"Role-Restrictive", t:"7. Migraines left you with limited energy levels?"},
+    {d:"Role-Preventive", t:"8. Stopped you from work or daily activities completely?"},
+    {d:"Role-Preventive", t:"9. Needed help from others for routine tasks during attack?"},
+    {d:"Role-Preventive", t:"10. Avoided social/family events to manage migraine attack?"},
+    {d:"Role-Preventive", t:"11. Difficult to attend social events or parties?"},
+    {d:"Emotional Function", t:"12. Felt fed up or frustrated because of migraines?"},
+    {d:"Emotional Function", t:"13. Felt like a burden to family or others?"},
+    {d:"Emotional Function", t:"14. Afraid of letting others down?"}
+  ];
+  const msqOpts = [{t:"1: None",v:1},{t:"2: A Little",v:2},{t:"3: Some",v:3},{t:"4: Good bit",v:4},{t:"5: Most",v:5},{t:"6: All",v:6}];
+
+  // Generate Page 1
+  document.getElementById('hit6Container').innerHTML = hitQuestions.map((q, i) => `
     <div class="q-card">
-      <span class="badge">Role-Restrictive</span>
-      <div class="q-title">6. Had to cancel or delay work/social events due to exhaustion?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq6" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq6" value="2"> 2: A Little</label>
-        <label class="radio-label"><input type="radio" name="msq6" value="3"> 3: Some</label>
-        <label class="radio-label"><input type="radio" name="msq6" value="4"> 4: Good bit</label>
-        <label class="radio-label"><input type="radio" name="msq6" value="5"> 5: Most</label>
-        <label class="radio-label"><input type="radio" name="msq6" value="6"> 6: All</label>
-      </div>
+      <div class="q-title">${q}</div>
+      <div class="radio-grid">${hitOpts.map((o, oi) => `
+        <label class="radio-label"><input type="radio" name="h_${i}" value="${o.v}" ${oi===0?'checked':''}> ${o.t}</label>
+      `).join('')}</div>
     </div>
+  `).join('');
 
+  // Generate Page 2
+  document.getElementById('msqContainer').innerHTML = msqQuestions.map((q, i) => `
     <div class="q-card">
-      <span class="badge">Role-Restrictive</span>
-      <div class="q-title">7. Migraines left you with limited energy levels?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq7" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq7" value="2"> 2: A Little</label>
-        <label class="radio-label"><input type="radio" name="msq7" value="3"> 3: Some</label>
-        <label class="radio-label"><input type="radio" name="msq7" value="4"> 4: Good bit</label>
-        <label class="radio-label"><input type="radio" name="msq7" value="5"> 5: Most</label>
-        <label class="radio-label"><input type="radio" name="msq7" value="6"> 6: All</label>
-      </div>
+      <span class="badge">${q.d}</span>
+      <div class="q-title">${q.t}</div>
+      <div class="radio-grid">${msqOpts.map((o, oi) => `
+        <label class="radio-label"><input type="radio" name="m_${i}" value="${o.v}" ${oi===0?'checked':''}> ${o.t}</label>
+      `).join('')}</div>
     </div>
+  `).join('');
 
-    <div class="q-card">
-      <span class="badge">Role-Preventive</span>
-      <div class="q-title">8. Stopped you from work or daily activities completely?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq8" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq8" value="2"> 2: A Little</label>
-        <label class="radio-label"><input type="radio" name="msq8" value="3"> 3: Some</label>
-        <label class="radio-label"><input type="radio" name="msq8" value="4"> 4: Good bit</label>
-        <label class="radio-label"><input type="radio" name="msq8" value="5"> 5: Most</label>
-        <label class="radio-label"><input type="radio" name="msq8" value="6"> 6: All</label>
-      </div>
-    </div>
+  let reportData = {};
 
-    <div class="q-card">
-      <span class="badge">Role-Preventive</span>
-      <div class="q-title">9. Needed help from others for routine tasks during attack?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq9" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq9" value="2"> 2: A Little</label>
-        <label class="radio-label"><input type="radio" name="msq9" value="3"> 3: Some</label>
-        <label class="radio-label"><input type="radio" name="msq9" value="4"> 4: Good bit</label>
-        <label class="radio-label"><input type="radio" name="msq9" value="5"> 5: Most</label>
-        <label class="radio-label"><input type="radio" name="msq9" value="6"> 6: All</label>
-      </div>
-    </div>
+  function setTab(num) {
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById('page' + i).classList.remove('active');
+      document.getElementById('tab' + i).classList.remove('active');
+    }
+    document.getElementById('page' + num).classList.add('active');
+    document.getElementById('tab' + num).classList.add('active');
+    window.scrollTo(0, 0);
+  }
 
-    <div class="q-card">
-      <span class="badge">Role-Preventive</span>
-      <div class="q-title">10. Avoided social/family events to manage migraine attack?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq10" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq10" value="2"> 2: A Little</label>
-        <label class="radio-label"><input type="radio" name="msq10" value="3"> 3: Some</label>
-        <label class="radio-label"><input type="radio" name="msq10" value="4"> 4: Good bit</label>
-        <label class="radio-label"><input type="radio" name="msq10" value="5"> 5: Most</label>
-        <label class="radio-label"><input type="radio" name="msq10" value="6"> 6: All</label>
-      </div>
-    </div>
+  function calcAndShow() {
+    let hitSum = 0;
+    for (let i = 0; i < 6; i++) {
+      const el = document.querySelector(`input[name="h_${i}"]:checked`);
+      hitSum += el ? parseInt(el.value) : 6;
+    }
+    let hitText = hitSum <= 49 ? "Little to No Impact (Score ≤ 49)" : hitSum <= 55 ? "Some Impact (Score 50–55)" : hitSum <= 59 ? "Substantial Impact (Score 56–59)" : "Severe Impact (Score ≥ 60 indicates severe life impact)";
 
-    <div class="q-card">
-      <span class="badge">Role-Preventive</span>
-      <div class="q-title">11. Difficult to attend social events or parties?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq11" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq11" value="2"> 2: A Little</label>
-        <label class="radio-label"><input type="radio" name="msq11" value="3"> 3: Some</label>
-        <label class="radio-label"><input type="radio" name="msq11" value="4"> 4: Good bit</label>
-        <label class="radio-label"><input type="radio" name="msq11" value="5"> 5: Most</label>
-        <label class="radio-label"><input type="radio" name="msq11" value="6"> 6: All</label>
-      </div>
-    </div>
+    const mTotal = (parseInt(document.getElementById('m1').value)||0) + (parseInt(document.getElementById('m2').value)||0) + (parseInt(document.getElementById('m3').value)||0) + (parseInt(document.getElementById('m4').value)||0) + (parseInt(document.getElementById('m5').value)||0);
+    let mText = mTotal <= 5 ? "Grade I: Little or No Disability (0–5)" : mTotal <= 10 ? "Grade II: Mild Disability (6–10)" : mTotal <= 20 ? "Grade III: Moderate Disability (11–20)" : "Grade IV: Severe Disability (Score ≥ 21 indicates severe limitation)";
 
-    <div class="q-card">
-      <span class="badge">Emotional Function</span>
-      <div class="q-title">12. Felt fed up or frustrated because of migraines?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq12" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq12" value="2"> 2: A Little</label>
-        <label class="radio-label"><input type="radio" name="msq12" value="3"> 3: Some</label>
-        <label class="radio-label"><input type="radio" name="msq12" value="4"> 4: Good bit</label>
-        <label class="radio-label"><input type="radio" name="msq12" value="5"> 5: Most</label>
-        <label class="radio-label"><input type="radio" name="msq12" value="6"> 6: All</label>
-      </div>
-    </div>
+    const vas = parseInt(document.getElementById('vasIn').value);
+    let vasText = vas === 0 ? "No Pain" : vas <= 3 ? "Mild Pain Intensity" : vas <= 6 ? "Moderate Pain Intensity" : "Severe Pain Intensity";
 
-    <div class="q-card">
-      <span class="badge">Emotional Function</span>
-      <div class="q-title">13. Felt like a burden to family or others?</div>
-      <div class="radio-grid">
-        <label class="radio-label"><input type="radio" name="msq13" value="1" checked> 1: None</label>
-        <label class="radio-label"><input type="radio" name="msq13" value="2"> 2: A Little</lab
+    let rRaw = 0, pRaw = 0, eRaw = 0;
+    for (let i = 0; i < 7; i++) rRaw += parseInt(document.querySelector(`input[name="m_${i}"]:checked`).value);
+    for (let i = 7; i < 11; i++) pRaw += parseInt(document.querySelector(`input[name="m_${i}"]:checked`).value);
+    for (let i = 11; i < 14; i++) eRaw += parseInt(document.querySelector(`input[name="m_${i}"]:checked`).value);
+
+    const rScore = Math.max(0, Math.round(((rRaw - 7) * 100) / 35));
+    const pScore = Math.max(0, Math.round(((pRaw - 4) * 100) / 20));
+    const eScore = Math.max(0, Math.round(((eRaw - 3) * 100) / 15));
+    const msqAvg = Math.round((rScore + pScore + eScore) / 3);
+    let msqText = msqAvg <= 49 ? "Significant impairment / Mild (Grade 1)" : msqAvg <= 59 ? "Moderate impairment (Grade 2)" : msqAvg <= 74 ? "Substantial impairment (Grade 3)" : "Severe impairment (Grade 4)";
+
+    reportData = {
+      HIT6: `${hitSum} / 78 (${hitText})`,
+      MIDAS: `${mTotal} Days (${mText})`,
+      VAS: `${vas} / 10 (${vasText})`,
+      MSQ: `Score: ${msqAvg} (${msqText}) [Restr: ${rScore}, Prev: ${pScore}, Emo: ${eScore}]`
+    };
+
+    document.getElementById('resultsTbody').innerHTML = `
+      <tr><td class="t-bold">HIT-6</td><td>Headache Impact Test-6</td><td class="t-bold">${hitSum} / 78</td><td>${hitText}</td></tr>
+      <tr><td class="t-bold">MIDAS</td><td>Migraine Disability Assessment</td><td class="t-bold">${mTotal}</td><td>${mText}</td></tr>
+      <tr><td class="t-bold">VAS</td><td>Visual Analog Scale (Pain)</td><td class="t-bold">${vas} / 10</td><td>${vasText}</td></tr>
+      <tr><td class="t-bold">MSQ</td><td>Migraine-Specific Quality of Life<div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">Restrictive: ${rScore} | Preventive: ${pScore} | Emotional: ${eScore}</div></td><td class="t-bold">${msqAvg}</td><td>${msqText}</td></tr>
+    `;
+
+    setTab(4);
+  }
+
+  async function sendMail() {
+    const btn = document.getElementById('sendBtn');
+    const msg = document.getElementById('statusMsg');
+    btn.disabled = true; btn.innerText = "Sending...";
+    msg.style.color = "#94a3b8"; msg.innerText = "Transmitting results...";
+
+    try {
+      const res = await fetch("https://formspree.io/f/xkjnnkpr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          Patient_Name: document.getElementById('pName').value || "Anonymous",
+          Patient_Email: document.getElementById('pEmail').value || "Not Given",
+          ...reportData
+        })
+      });
+      if (res.ok) {
+        msg.style.color = "#34d399"; msg.innerText = "✓ Results emailed successfully!";
+        btn.innerText = "Sent Successfully ✓";
+      } else { throw new Error(); }
+    } catch (e) {
+      msg.style.color = "#f87171"; msg.innerText = "Failed to send email. Try again.";
+      btn.disabled = false; btn.innerText = "Retry Sending";
+    }
+  }
+</script>
+</body>
+</html>
